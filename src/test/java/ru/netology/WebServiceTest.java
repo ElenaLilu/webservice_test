@@ -38,9 +38,41 @@ public class WebServiceTest {
         driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79352746655");
         driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
         driver.findElement(By.className("button__text")).click();
-        String expected = "  Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.";
-        String actual = driver.findElement(By.cssSelector("[data-test-id=order-success]")).getText();
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals( "  Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.",
+        driver.findElement(By.cssSelector("[data-test-id=order-success]")).getText());
+
+    }
+
+    @Test
+    void InvalidOpenPage() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Ekaterina Ivanova");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79352746655");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button__text")).click();
+        Assertions.assertEquals("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.",
+                driver.findElement(By.cssSelector("[data-test-id=name].input_invalid .input__sub")).getText());
+
+    }
+
+    @Test
+    void InvalidOpenPage2() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Екатерина Иванова");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+793527466555");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button__text")).click();
+        Assertions.assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.",
+                driver.findElement(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText());
+
+    }
+
+    @Test
+    void InvalidOpenPage3() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Екатерина Иванова");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79352746655");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button__text")).click();
+        Assertions.assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.",
+                driver.findElement(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText());
 
     }
 

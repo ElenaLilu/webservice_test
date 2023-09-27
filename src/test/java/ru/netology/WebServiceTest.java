@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.chrome.ChromeOptions;
+
 public class WebServiceTest {
     private static WebDriver driver;
 
@@ -44,7 +45,7 @@ public class WebServiceTest {
     }
 
     @Test
-    void InvalidOpenPage() {
+    void invalidName() {
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Ekaterina Ivanova");
         driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79352746655");
         driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
@@ -55,7 +56,18 @@ public class WebServiceTest {
     }
 
     @Test
-    void InvalidOpenPage2() {
+    void numbersInsteadOfLettersInName() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("+79352746655");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79352746655");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button__text")).click();
+        Assertions.assertEquals("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.",
+                driver.findElement(By.cssSelector("[data-test-id=name].input_invalid .input__sub")).getText());
+
+    }
+
+    @Test
+    void invalidPhone() {
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Екатерина Иванова");
         driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+793527466555");
         driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
@@ -66,9 +78,9 @@ public class WebServiceTest {
     }
 
     @Test
-    void InvalidOpenPage3() {
+    void phoneWithoutPlus() {
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Екатерина Иванова");
-        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79352746655");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("79352746655");
         driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
         driver.findElement(By.className("button__text")).click();
         Assertions.assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.",
@@ -76,5 +88,26 @@ public class WebServiceTest {
 
     }
 
+    @Test
+    void lessNumbersThan11() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Екатерина Иванова");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+7935274665");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button__text")).click();
+        Assertions.assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.",
+                driver.findElement(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText());
 
-}
+    }
+
+    @Test
+    void lettersInsteadOfNumbersInPhone() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Екатерина Иванова");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("dhdkeekl");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button__text")).click();
+        Assertions.assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.",
+                driver.findElement(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText());
+
+    }
+    }
+

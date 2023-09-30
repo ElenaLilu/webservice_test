@@ -67,6 +67,17 @@ public class WebServiceTest {
     }
 
     @Test
+    void emptyName() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79352746655");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button__text")).click();
+        Assertions.assertEquals("Поле обязательно для заполнения",
+                driver.findElement(By.cssSelector("[data-test-id=name].input_invalid .input__sub")).getText());
+
+    }
+
+    @Test
     void invalidPhone() {
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Екатерина Иванова");
         driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+793527466555");
@@ -88,6 +99,7 @@ public class WebServiceTest {
 
     }
 
+
     @Test
     void lessNumbersThan11() {
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Екатерина Иванова");
@@ -99,6 +111,7 @@ public class WebServiceTest {
 
     }
 
+
     @Test
     void lettersInsteadOfNumbersInPhone() {
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Екатерина Иванова");
@@ -107,6 +120,28 @@ public class WebServiceTest {
         driver.findElement(By.className("button__text")).click();
         Assertions.assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.",
                 driver.findElement(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText());
+
+    }
+
+    @Test
+    void phoneEmpty() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Екатерина Иванова");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button__text")).click();
+        Assertions.assertEquals("Поле обязательно для заполнения",
+                driver.findElement(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText());
+
+    }
+
+    @Test
+    void agreementEmpty() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Екатерина Иванова");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+76665554433");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]"));
+        driver.findElement(By.className("button__text")).click();
+        Assertions.assertEquals("Я соглашаюсь с условиями обработки и использования моих персональных данных и разрешаю сделать запрос в бюро кредитных историй",
+                driver.findElement(By.cssSelector("[data-test-id=agreement].input_invalid .checkbox__text")).getText());
 
     }
     }
